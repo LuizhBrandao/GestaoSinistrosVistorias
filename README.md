@@ -1,4 +1,4 @@
-# 🚗 Plataforma de Gestão de Sinistros e Vistorias
+#  Plataforma de Gestão de Sinistros e Vistorias
 > **Arquitetura Corporativa Orientada a Eventos (Enterprise & Event-Driven Architecture)** para regulação de sinistros automotivos, vistorias técnicas e esteira de aprovação de alçadas.
 
 [![CI Pipeline](https://github.com/LuizhBrandao/GestaoSinistrosVistorias/actions/workflows/ci.yml/badge.svg)](https://github.com/LuizhBrandao/GestaoSinistrosVistorias/actions/workflows/ci.yml)
@@ -12,7 +12,7 @@
 
 ---
 
-## 📌 Visão Geral do Projeto
+##  Visão Geral do Projeto
 
 Este projeto simula uma **solução de missão crítica do setor securitário (Insurance & Insurtech)**, projetada com rigor de governança, **Domain-Driven Design (DDD)** tático e estratégico, e **Clean Architecture**.
 
@@ -25,7 +25,7 @@ O sistema gerencia o ciclo completo de um sinistro automotivo:
 
 ---
 
-## 🏛️ Arquitetura da Solução (C4 Container & Event-Driven)
+##  Arquitetura da Solução (C4 Container & Event-Driven)
 
 ```mermaid
 graph TB
@@ -65,7 +65,7 @@ graph TB
 
 ---
 
-## 💡 Decisões de Arquitetura (ADRs)
+##  Decisões de Arquitetura (ADRs)
 
 | Componente | Escolha Técnica | Justificativa Arquitetural |
 | :--- | :--- | :--- |
@@ -77,7 +77,7 @@ graph TB
 
 ---
 
-## 🛡️ Regras de Domínio e Governança Implementadas
+##  Regras de Domínio e Governança Implementadas
 
 1. **Classificação Regulatória de Perda (SUSEP):**
    - **Perda Total (Indenização Integral):** Ocorre se o custo do orçamento de peças e reparos for $\ge 75\%$ do valor da Tabela FIPE do veículo. Indeniza-se **100% da FIPE sem desconto de franquia**.
@@ -91,7 +91,7 @@ graph TB
 
 ---
 
-## 🚀 Como Executar Localmente (Setup em Um Comando)
+##  Como Executar Localmente (Setup em Um Comando)
 
 ### Pré-requisitos
 - [Docker](https://www.docker.com/) e Docker Compose
@@ -112,7 +112,7 @@ dotnet test src/backend/tests/Sinistros.Domain.Tests/Sinistros.Domain.Tests.cspr
 
 ---
 
-## 📂 Estrutura do Repositório
+##  Estrutura do Repositório
 
 ```text
 ├── .github/workflows/ci.yml       # Pipeline CI automatizado com GitHub Actions
@@ -134,6 +134,6 @@ dotnet test src/backend/tests/Sinistros.Domain.Tests/Sinistros.Domain.Tests.cspr
 
 ---
 
-## 👨‍💻 Autor
+##  Autor
 **Luiz Henrique Brandão**  
 *Desenvolvedor de Software focado em Arquitetura Corporativa, .NET, Angular e Soluções Event-Driven.*
