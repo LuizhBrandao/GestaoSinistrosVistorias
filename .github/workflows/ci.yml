@@ -26,5 +26,5 @@ jobs:
     - name: Build da Solução (.NET 10)
       run: dotnet build src/backend/Sinistros.slnx --no-restore --configuration Release
 
-    - name: Executar Testes Unitários de Domínio (xUnit)
-      run: dotnet test src/backend/tests/Sinistros.Domain.Tests/Sinistros.Domain.Tests.csproj --no-build --configuration Release --verbosity normal --collect:"XPlat Code Coverage"
+    - name: Executar Testes Automatizados (xUnit)
+      run: dotnet test src/backend/Sinistros.slnx --no-build --configuration Release --verbosity normal

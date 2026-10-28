@@ -1,5 +1,6 @@
 <Solution>
   <Folder Name="/tests/">
+    <Project Path="tests/Sinistros.Application.Tests/Sinistros.Application.Tests.csproj" />
     <Project Path="tests/Sinistros.Domain.Tests/Sinistros.Domain.Tests.csproj" />
   </Folder>
   <Project Path="Sinistros.Application/Sinistros.Application.csproj" />

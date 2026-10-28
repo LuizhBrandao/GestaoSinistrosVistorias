@@ -8,7 +8,7 @@
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL%2016-4169E1?style=flat&logo=postgresql&logoColor=white)
 ![RabbitMQ](https://img.shields.io/badge/RabbitMQ-FF6600?style=flat&logo=rabbitmq&logoColor=white)
 ![Docker](https://img.shields.io/badge/Docker%20Compose-2496ED?style=flat&logo=docker&logoColor=white)
-![xUnit](https://img.shields.io/badge/Tests-xUnit%20(24%20Passed)-green?style=flat)
+![xUnit](https://img.shields.io/badge/Tests-xUnit%20(29%20Passed)-green?style=flat)
 
 ---
 
