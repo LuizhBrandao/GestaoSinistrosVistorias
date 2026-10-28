@@ -28,3 +28,30 @@ jobs:
 
     - name: Executar Testes Automatizados (xUnit)
       run: dotnet test src/backend/Sinistros.slnx --no-build --configuration Release --verbosity normal
+
+  build-and-test-bff:
+    name: Node.js 24 BFF Build & Tests
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Código
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js 24
+      uses: actions/setup-node@v4
+      with:
+        node-version: 24
+        cache: 'npm'
+        cache-dependency-path: 'src/bff-services/package-lock.json'
+
+    - name: Instalar Dependências
+      working-directory: src/bff-services
+      run: npm ci
+
+    - name: Build TypeScript
+      working-directory: src/bff-services
+      run: npm run build
+
+    - name: Executar Testes Automatizados
+      working-directory: src/bff-services
+      run: npm test
