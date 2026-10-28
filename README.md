@@ -140,6 +140,6 @@ docker compose up -d
 
 ---
 
-## 👨‍💻 Autor
+##  Autor
 **Luiz Henrique Brandão**  
 *Desenvolvedor de Software focado em Arquitetura Corporativa, .NET, Angular, Node.js e Soluções Event-Driven.*
