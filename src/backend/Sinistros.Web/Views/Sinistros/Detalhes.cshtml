@@ -1,0 +1,292 @@
+@using Sinistros.Domain.Enums
+@model Sinistros.Application.DTOs.SinistroDetalhesDto
+
+@{
+    ViewData["Title"] = $"Sinistro {Model.NumeroSinistro}";
+    var vistoria = ViewBag.Vistoria as Sinistros.Application.DTOs.VistoriaDto;
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <div class="d-flex align-items-center gap-2 mb-1">
+            <h2 class="fw-bold mb-0">Sinistro @Model.NumeroSinistro</h2>
+            @switch (Model.Status)
+            {
+                case StatusSinistro.Aberto:
+                    <span class="badge bg-secondary">Aberto</span>
+                    break;
+                case StatusSinistro.AguardandoVistoria:
+                    <span class="badge bg-info">Aguardando Vistoria</span>
+                    break;
+                case StatusSinistro.AguardandoAprovacaoAlcada:
+                    <span class="badge bg-warning text-dark">Aguardando Alçada</span>
+                    break;
+                case StatusSinistro.Aprovado:
+                    <span class="badge bg-success">Aprovado</span>
+                    break;
+                case StatusSinistro.Liquidado:
+                    <span class="badge bg-dark">Liquidado</span>
+                    break;
+                default:
+                    <span class="badge bg-secondary">@Model.Status</span>
+                    break;
+            }
+        </div>
+        <p class="text-muted mb-0">Aberto em @Model.DataAberturaUtc.ToString("dd/MM/yyyy HH:mm") UTC • Ocorrência: @Model.DataOcorrenciaUtc.ToString("dd/MM/yyyy")</p>
+    </div>
+    <a asp-action="Index" class="btn btn-outline-secondary">
+        <i class="bi bi-arrow-left me-1"></i> Voltar à Fila
+    </a>
+</div>
+
+<div class="row g-4 mb-4">
+    <!-- Dados do Veículo & Apólice -->
+    <div class="col-lg-4">
+        <div class="card border-0 shadow-sm rounded-3 h-100">
+            <div class="card-header bg-white py-3 border-bottom">
+                <h5 class="fw-bold mb-0"><i class="bi bi-car-front text-primary me-2"></i>Veículo & Apólice</h5>
+            </div>
+            <div class="card-body">
+                <dl class="row mb-0">
+                    <dt class="col-sm-5 text-muted">Placa:</dt>
+                    <dd class="col-sm-7 fw-bold font-monospace">@Model.PlacaVeiculo</dd>
+
+                    <dt class="col-sm-5 text-muted">Apólice:</dt>
+                    <dd class="col-sm-7 font-monospace">@Model.NumeroApolice</dd>
+
+                    <dt class="col-sm-5 text-muted">Tabela FIPE:</dt>
+                    <dd class="col-sm-7 fw-bold text-success">R$ @Model.ValorFipeReferencia.ToString("N2")</dd>
+
+                    <dt class="col-sm-5 text-muted">Franquia:</dt>
+                    <dd class="col-sm-7">R$ @Model.Franquia.ToString("N2")</dd>
+
+                    <dt class="col-sm-5 text-muted">Limite PT (75%):</dt>
+                    <dd class="col-sm-7 text-danger">R$ @((Model.ValorFipeReferencia * 0.75m).ToString("N2"))</dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+
+    <!-- Parecer da Regulação Técnica -->
+    <div class="col-lg-8">
+        <div class="card border-0 shadow-sm rounded-3 h-100">
+            <div class="card-header bg-white py-3 border-bottom d-flex justify-content-between align-items-center">
+                <h5 class="fw-bold mb-0"><i class="bi bi-calculator text-primary me-2"></i>Parecer Técnico de Regulação</h5>
+                @if (Model.Parecer is not null)
+                {
+                    @if (Model.Parecer.TipoPerda == TipoPerda.PerdaTotal)
+                    {
+                        <span class="badge bg-danger fs-6"><i class="bi bi-exclamation-triangle-fill me-1"></i> Perda Total (Indenização Integral)</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-primary fs-6">Perda Parcial</span>
+                    }
+                }
+            </div>
+            <div class="card-body">
+                @if (Model.Parecer is null)
+                {
+                    <div class="text-center py-4 text-muted">
+                        <i class="bi bi-clock-history fs-2 d-block mb-2"></i>
+                        Aguardando conclusão do laudo pericial para cálculo automático de indenização.
+                    </div>
+                }
+                else
+                {
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-3">
+                            <div class="p-3 bg-light rounded text-center">
+                                <span class="small text-muted d-block">Custo Orçado Reparo</span>
+                                <strong class="fs-5 text-dark">R$ @Model.Parecer.CustoTotalOrcado.ToString("N2")</strong>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="p-3 bg-light rounded text-center">
+                                <span class="small text-muted d-block">Franquia Aplicada</span>
+                                <strong class="fs-5 text-secondary">R$ @Model.Parecer.FranquiaAplicada.ToString("N2")</strong>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="p-3 bg-success-subtle rounded text-center border border-success-subtle">
+                                <span class="small text-success d-block fw-semibold">Valor Líquido a Indenizar</span>
+                                <strong class="fs-5 text-success">R$ @Model.Parecer.ValorLiquidoIndenizar.ToString("N2")</strong>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="p-3 bg-warning-subtle rounded text-center border border-warning-subtle">
+                                <span class="small text-warning-emphasis d-block fw-semibold">Alçada Mínima</span>
+                                <strong class="fs-6 text-warning-emphasis">@Model.Parecer.NivelAlcadaRequerido</strong>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="alert alert-light border small text-muted mb-0">
+                        <i class="bi bi-info-circle me-1"></i> <strong>Regra SUSEP Aplicada:</strong>
+                        @if (Model.Parecer.TipoPerda == TipoPerda.PerdaTotal)
+                        {
+                            <span>Custo orçado atingiu ou superou o teto de 75% da Tabela FIPE. Indeniza-se 100% da cotação de mercado sem retenção de franquia, requerendo alçada gerencial.</span>
+                        }
+                        else
+                        {
+                            <span>Custo de reparo inferior a 75% da FIPE. Sinistro liquidável mediante desconto contratual da franquia do segurado.</span>
+                        }
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Ações de Governança e Aprovação -->
+@if (Model.Status == StatusSinistro.AguardandoAprovacaoAlcada)
+{
+    <div class="card border-warning shadow-sm rounded-3 mb-4">
+        <div class="card-header bg-warning-subtle py-3 border-warning">
+            <h5 class="fw-bold text-warning-emphasis mb-0"><i class="bi bi-shield-check me-2"></i>Decisão de Alçada Regulamentar</h5>
+        </div>
+        <div class="card-body">
+            <form asp-action="Aprovar" method="post" class="row g-3 align-items-end">
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="id" value="@Model.Id" />
+                <div class="col-md-4">
+                    <label class="form-label small fw-semibold">Nível de Alçada do Usuário Conectado</label>
+                    <select name="nivelUsuario" class="form-select">
+                        <option value="Operacional">Analista (Até R$ 10.000)</option>
+                        <option value="Supervisao">Supervisor (Até R$ 50.000)</option>
+                        <option value="Gerencial" selected>Gerente (Acima de R$ 50.000 ou Perda Total)</option>
+                        <option value="Diretoria">Diretoria (Ilimitado)</option>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label small fw-semibold">Justificativa Formal para Trilha de Auditoria</label>
+                    <input type="text" name="justificativa" class="form-control" placeholder="Informe a justificativa técnica/financeira da aprovação..." required minlength="10" />
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-success w-100 py-2 fw-semibold">
+                        <i class="bi bi-check-lg me-1"></i> Aprovar Alçada
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+}
+
+@if (Model.Status == StatusSinistro.Aprovado)
+{
+    <div class="card border-success shadow-sm rounded-3 mb-4">
+        <div class="card-body d-flex justify-content-between align-items-center">
+            <div>
+                <h5 class="fw-bold text-success mb-1"><i class="bi bi-cash-stack me-2"></i>Sinistro Aprovado - Pronto para Liquidação Financeira</h5>
+                <p class="text-muted small mb-0">Todas as alçadas foram satisfeitas. Dispare a ordem de liquidação para pagamento.</p>
+            </div>
+            <form asp-action="Liquidar" method="post">
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="id" value="@Model.Id" />
+                <button type="submit" class="btn btn-primary px-4 py-2 fw-semibold">
+                    <i class="bi bi-send-check me-1"></i> Liquidar Pagamento
+                </button>
+            </form>
+        </div>
+    </div>
+}
+
+<!-- Seção da Vistoria Técnica -->
+@if (vistoria is not null)
+{
+    <div class="card border-0 shadow-sm rounded-3 mb-4">
+        <div class="card-header bg-white py-3 border-bottom d-flex justify-content-between align-items-center">
+            <h5 class="fw-bold mb-0"><i class="bi bi-camera text-primary me-2"></i>Laudo Pericial de Vistoria</h5>
+            <span class="badge bg-secondary font-monospace">Perito: @vistoria.PeritoId</span>
+        </div>
+        <div class="card-body">
+            <h6 class="fw-bold text-muted small text-uppercase mb-2">Checklist de Avarias Registradas</h6>
+            <div class="table-responsive mb-4">
+                <table class="table table-sm table-bordered align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Peça / Componente</th>
+                            <th>Ação Recomendada</th>
+                            <th class="text-end">Mão de Obra</th>
+                            <th class="text-end">Peças</th>
+                            <th class="text-end">Total Item</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var avaria in vistoria.Avarias)
+                        {
+                            <tr>
+                                <td class="fw-semibold">@avaria.Peca</td>
+                                <td><span class="badge bg-light text-dark border">@avaria.TipoAcao</span></td>
+                                <td class="text-end">R$ @avaria.CustoMaoDeObra.ToString("N2")</td>
+                                <td class="text-end">R$ @avaria.CustoPecas.ToString("N2")</td>
+                                <td class="text-end fw-bold">R$ @avaria.CustoTotal.ToString("N2")</td>
+                            </tr>
+                        }
+                    </tbody>
+                    <tfoot>
+                        <tr class="table-light fw-bold">
+                            <td colspan="4" class="text-end">Total do Orçamento Pericial:</td>
+                            <td class="text-end text-primary">R$ @vistoria.CustoTotalOrcado.ToString("N2")</td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+
+            <h6 class="fw-bold text-muted small text-uppercase mb-2">Acervo Probatório de Fotos (Anti-Fraude)</h6>
+            <div class="row g-3">
+                @foreach (var foto in vistoria.Evidencias)
+                {
+                    <div class="col-md-6">
+                        <div class="p-3 border rounded bg-light">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span class="badge bg-success small"><i class="bi bi-geo-alt-fill me-1"></i> GPS: @(foto.Latitude.HasValue ? $"{foto.Latitude:F4}, {foto.Longitude:F4}" : "Registrado")</span>
+                                <span class="small text-muted font-monospace">Hash SHA-256 verificado</span>
+                            </div>
+                            <div class="small font-monospace text-truncate text-muted mb-1">
+                                SHA-256: @foto.HashArquivoSha256
+                            </div>
+                            <div class="small text-muted">
+                                Captura EXIF: @(foto.DataCapturaExif?.ToString("dd/MM/yyyy HH:mm") ?? "N/A")
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+}
+
+<!-- Trilha de Auditoria Imutável -->
+<div class="card border-0 shadow-sm rounded-3">
+    <div class="card-header bg-white py-3 border-bottom d-flex justify-content-between align-items-center">
+        <h5 class="fw-bold mb-0"><i class="bi bi-fingerprint text-success me-2"></i>Trilha de Auditoria Imutável (Compliance)</h5>
+        <span class="badge bg-success-subtle text-success border border-success-subtle">Audit Trail Ativo</span>
+    </div>
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0 small">
+                <thead class="table-light">
+                    <tr>
+                        <th class="ps-4">Data / Hora (UTC)</th>
+                        <th>Usuário / Sistema</th>
+                        <th>Ação Realizada</th>
+                        <th>Detalhes / Justificativa</th>
+                        <th class="pe-4">IP Origem</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var audit in Model.Auditoria.OrderByDescending(a => a.DataHoraUtc))
+                    {
+                        <tr>
+                            <td class="ps-4 font-monospace text-muted">@audit.DataHoraUtc.ToString("dd/MM/yyyy HH:mm:ss")</td>
+                            <td class="fw-semibold">@audit.Usuario</td>
+                            <td><span class="badge bg-light text-dark border">@audit.Acao</span></td>
+                            <td>@audit.Detalhes</td>
+                            <td class="pe-4 font-monospace text-muted">@(audit.IpOrigem ?? "-")</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
