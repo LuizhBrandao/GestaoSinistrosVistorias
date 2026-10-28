@@ -1,4 +1,4 @@
-# 🚗 Plataforma de Gestão de Sinistros e Vistorias
+#  Plataforma de Gestão de Sinistros e Vistorias
 > **Arquitetura Corporativa Orientada a Eventos (Enterprise & Event-Driven Architecture)** para regulação de sinistros automotivos, vistorias técnicas periciais e esteira de aprovação de alçadas regulatórias.
 
 [![CI Pipeline](https://github.com/LuizhBrandao/GestaoSinistrosVistorias/actions/workflows/ci.yml/badge.svg)](https://github.com/LuizhBrandao/GestaoSinistrosVistorias/actions/workflows/ci.yml)
@@ -12,7 +12,7 @@
 
 ---
 
-## 📌 Visão Executiva do Projeto
+##  Visão Executiva do Projeto
 
 Projetada como uma **solução de missão crítica do setor financeiro e segurador (Insurtech & Banking)**, a plataforma resolve os três principais gargalos operacionais da regulação de sinistros de veículos:
 1. **Lentidão e Fraude na Coleta de Evidências em Campo:** Peritos utilizam uma **SPA Angular reativa com Signals** integrada a um **BFF Node.js/Fastify** que realiza compressão automática em **WebP (redução de ~75% no tráfego)**, validação de integridade criptográfica **SHA-256** e checagem de geolocalização **GPS (anti-fraude)**.
@@ -21,7 +21,7 @@ Projetada como uma **solução de missão crítica do setor financeiro e segurad
 
 ---
 
-## 🏛️ Arquitetura da Solução (C4 Container & Event-Driven)
+##  Arquitetura da Solução (C4 Container & Event-Driven)
 
 ```mermaid
 graph TB
@@ -61,7 +61,7 @@ graph TB
 
 ---
 
-## 💡 Decisões de Arquitetura (ADRs)
+##  Decisões de Arquitetura (ADRs)
 
 | Componente | Decisão Técnica | Justificativa Arquitetural |
 | :--- | :--- | :--- |
@@ -73,7 +73,7 @@ graph TB
 
 ---
 
-## 🛡️ Regras de Negócio e Governança DDD
+##  Regras de Negócio e Governança DDD
 
 1. **Classificação Regulatória de Perda (Normas SUSEP):**
    - **Perda Total (Indenização Integral):** Ocorre se o custo do orçamento de peças e mão de obra for $\ge 75\%$ do valor da Tabela FIPE do veículo. Indeniza-se **100% da FIPE sem dedução de franquia**.
@@ -87,7 +87,7 @@ graph TB
 
 ---
 
-## 🧪 Matriz de Testes Automatizados (33 Testes - 100% Passing)
+##  Matriz de Testes Automatizados (33 Testes - 100% Passing)
 
 | Camada | Ferramenta | Quantidade | Escopo dos Testes |
 | :--- | :--- | :---: | :--- |
@@ -98,7 +98,7 @@ graph TB
 
 ---
 
-## 🚀 Setup em Um Comando (`docker compose up -d`)
+##  Setup em Um Comando (`docker compose up -d`)
 
 O projeto está configurado para subir o ecossistema completo com **dados de demonstração já pré-carregados (Seed Data)**:
 
@@ -118,22 +118,7 @@ docker compose up -d
 
 ---
 
-## 🎯 Storytelling para Entrevistas Técnicas (Guia do Candidato)
-
-Durante a apresentação deste projeto a um Tech Lead ou Recrutador, utilize as seguintes respostas estratégicas:
-
-> **P: Por que você optou por uma arquitetura poliglota (.NET 10, Node.js e Angular) em vez de um monólito único?**  
-> **R:** "Porque cada tecnologia atende a uma característica de carga diferente do domínio: o **.NET 10** é imbatível em segurança de tipos, performance corporativa e integridade transacional de auditoria; o **Node.js** é ideal para I/O intensivo não bloqueante (upload de fotos pesadas, compressão WebP em fila e WebSockets sem onerar o pool de threads do .NET); e o **Angular com Signals** entrega uma SPA com formulários complexos de perícia e cálculo reativo de orçamentos em tempo real sem sobrecarga de Change Detection."
-
-> **P: Como você garantiu que o sistema não perdesse dados em caso de falha de conexão?**  
-> **R:** "Implementamos uma arquitetura orientada a eventos com **RabbitMQ**. Quando o perito conclui a vistoria, a mensagem é publicada com garantia de persistência. Caso o serviço .NET esteja indisponível ou sob manutenção, a mensagem permanece enfileirada no broker e é consumida assim que o serviço retorna, garantindo resiliência e consistência eventual."
-
-> **P: Onde está aplicada a governança de Domain-Driven Design (DDD)?**  
-> **R:** "No isolamento estrito de **Bounded Contexts** (Sinistros vs. Vistorias), no uso de **Value Objects imutáveis** para valores monetários e placas (evitando *primitive obsession*), em **Agregados** que protegem suas invariantes de negócio (como a regra que proíbe aprovar sinistros sem vistoria ou com alçada insuficiente), e na separação física em schemas no PostgreSQL (`sinistros`, `vistorias`, `auditoria`)."
-
----
-
-## 📂 Estrutura do Repositório
+##  Estrutura do Repositório
 
 ```text
 ├── .github/workflows/ci.yml       # Pipeline CI automatizado (3 jobs: .NET, Node, Angular)
