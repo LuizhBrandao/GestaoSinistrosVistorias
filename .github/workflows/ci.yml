@@ -1,0 +1,30 @@
+name: CI Pipeline
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build-and-test-dotnet:
+    name: .NET 10 Build & Unit Tests
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Código
+      uses: actions/checkout@v4
+
+    - name: Setup .NET 10
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '10.0.x'
+
+    - name: Restaurar Dependências
+      run: dotnet restore src/backend/Sinistros.slnx
+
+    - name: Build da Solução (.NET 10)
+      run: dotnet build src/backend/Sinistros.slnx --no-restore --configuration Release
+
+    - name: Executar Testes Unitários de Domínio (xUnit)
+      run: dotnet test src/backend/tests/Sinistros.Domain.Tests/Sinistros.Domain.Tests.csproj --no-build --configuration Release --verbosity normal --collect:"XPlat Code Coverage"
