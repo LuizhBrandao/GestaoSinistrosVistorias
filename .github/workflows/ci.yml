@@ -55,3 +55,30 @@ jobs:
     - name: Executar Testes Automatizados
       working-directory: src/bff-services
       run: npm test
+
+  build-and-test-frontend:
+    name: Angular 19+ Build & Unit Tests
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Código
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js 24
+      uses: actions/setup-node@v4
+      with:
+        node-version: 24
+        cache: 'npm'
+        cache-dependency-path: 'src/frontend/package-lock.json'
+
+    - name: Instalar Dependências
+      working-directory: src/frontend
+      run: npm ci
+
+    - name: Executar Testes Unitários do Angular
+      working-directory: src/frontend
+      run: npm test -- --watch=false
+
+    - name: Build Produção da SPA
+      working-directory: src/frontend
+      run: npm run build
