@@ -33,3 +33,5 @@ Thumbs.db
 *.log
 docker/postgres/data/
 docker/rabbitmq/data/
+src/bff-services/uploads/
+!src/bff-services/uploads/.gitkeep
