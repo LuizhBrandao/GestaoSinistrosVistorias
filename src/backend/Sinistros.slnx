@@ -1,0 +1,9 @@
+<Solution>
+  <Folder Name="/tests/">
+    <Project Path="tests/Sinistros.Domain.Tests/Sinistros.Domain.Tests.csproj" />
+  </Folder>
+  <Project Path="Sinistros.Application/Sinistros.Application.csproj" />
+  <Project Path="Sinistros.Domain/Sinistros.Domain.csproj" />
+  <Project Path="Sinistros.Infrastructure/Sinistros.Infrastructure.csproj" />
+  <Project Path="Sinistros.Web/Sinistros.Web.csproj" />
+</Solution>
